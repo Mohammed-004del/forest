@@ -426,9 +426,9 @@ overlay.addEventListener('click', () => { if (!ready) return; audio.start(); con
 controls.addEventListener('lock', () => overlay.classList.add('hidden'));
 controls.addEventListener('unlock', () => { overlay.classList.remove('hidden'); status.textContent = 'إيقاف مؤقت'; go.textContent = 'اضغط للرجوع للغابة'; });
 THREE.DefaultLoadingManager.onProgress = (_, done, total) => { if (!ready) status.textContent = `جاري التحميل… ${Math.round((done / total) * 100)}%`; };
-Promise.all([buildForest(), loadAnimals()]).catch((err) => { console.error(err); status.textContent = 'حصلت مشكلة في التحميل'; }).finally(() => {
+Promise.all([buildForest(), loadAnimals()]).then(() => {
   ready = true; status.textContent = 'الغابة جاهزة'; go.textContent = 'اضغط في أي حتة للدخول — السماعات أحسن'; go.classList.add('ready');
-});
+}, (err) => { console.error(err); status.textContent = 'النت فصل أثناء التحميل'; go.textContent = 'اعمل Refresh للصفحة (F5) وجرّب تاني'; });
 addEventListener('resize', () => { camera.aspect = innerWidth / innerHeight; camera.updateProjectionMatrix(); renderer.setSize(innerWidth, innerHeight); });
 
 // ---------- loop

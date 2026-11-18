@@ -51,6 +51,7 @@
   </div>
 </div>
 <script type="module">
+  import './net.js'; // resilient downloads, before anything starts fetching
   // phones and machines without WebGL2 can't run this: say so before downloading 300 MB
   const gl2 = !!document.createElement('canvas').getContext('webgl2');
   const touchOnly = matchMedia('(pointer: coarse)').matches && !matchMedia('(any-pointer: fine)').matches;
