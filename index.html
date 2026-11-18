@@ -1,0 +1,66 @@
+<!doctype html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>الغابة</title>
+<style>
+  html, body { margin: 0; height: 100%; overflow: hidden; background: #0b0f0c; font-family: "Segoe UI", Tahoma, system-ui, sans-serif; }
+  canvas { display: block; }
+  #overlay {
+    position: fixed; inset: 0; display: grid; place-items: center; cursor: pointer;
+    background: radial-gradient(ellipse at center, rgba(6, 12, 8, .25), rgba(4, 8, 5, .8));
+    color: #eef2e6; text-align: center; transition: opacity .4s;
+  }
+  #overlay.hidden { opacity: 0; pointer-events: none; }
+  .card { max-width: 440px; padding: 28px 32px; }
+  h1 { margin: 0 0 6px; font-size: 44px; font-weight: 300; letter-spacing: .02em; }
+  #status { margin: 0 0 22px; opacity: .75; font-size: 15px; }
+  .keys { display: grid; grid-template-columns: auto 1fr; gap: 8px 16px; text-align: right; font-size: 14px; opacity: .9; margin: 0 auto 24px; width: fit-content; }
+  kbd { font-family: inherit; background: rgba(255, 255, 255, .12); border: 1px solid rgba(255, 255, 255, .2); border-radius: 4px; padding: 1px 7px; font-size: 13px; }
+  .go { font-size: 17px; margin: 0; }
+  .go.ready { animation: pulse 2s ease-in-out infinite; }
+  @keyframes pulse { 50% { opacity: .55; } }
+  .note { margin: 18px 0 0; font-size: 12px; opacity: .55; }
+  .note a { color: inherit; }
+  #warn { display: none; margin: 0 0 18px; font-size: 14px; line-height: 1.6; color: #f3d79b; }
+  #warn button { margin-top: 10px; font: inherit; color: #0b0f0c; background: #eef2e6; border: 0; border-radius: 6px; padding: 6px 16px; cursor: pointer; }
+</style>
+<script type="importmap">
+{ "imports": {
+  "three": "https://cdn.jsdelivr.net/npm/three@0.170.0/build/three.module.js",
+  "three/addons/": "https://cdn.jsdelivr.net/npm/three@0.170.0/examples/jsm/"
+} }
+</script>
+</head>
+<body>
+<div id="overlay">
+  <div class="card">
+    <h1>الغابة</h1>
+    <p id="status">جاري التحميل…</p>
+    <div class="keys">
+      <span><kbd>W</kbd> <kbd>A</kbd> <kbd>S</kbd> <kbd>D</kbd></span><span>المشي</span>
+      <span><kbd>Shift</kbd></span><span>الجري</span>
+      <span><kbd>Space</kbd></span><span>النط</span>
+      <span>الماوس</span><span>التلفّت</span>
+      <span><kbd>Esc</kbd></span><span>إيقاف</span>
+    </div>
+    <p class="go" id="go">استنى ثواني…</p>
+    <p id="warn"></p>
+    <p class="note">التحميل حوالي 300 ميجا — محتاج كمبيوتر بكارت شاشة كويس، كيبورد وماوس.<br><a href="assets/README.txt" target="_blank" onclick="event.stopPropagation()">مصادر الموديلات والأصوات</a></p>
+  </div>
+</div>
+<script type="module">
+  // phones and machines without WebGL2 can't run this: say so before downloading 300 MB
+  const gl2 = !!document.createElement('canvas').getContext('webgl2');
+  const touchOnly = matchMedia('(pointer: coarse)').matches && !matchMedia('(any-pointer: fine)').matches;
+  const warn = document.getElementById('warn'), start = () => { warn.style.display = 'none'; import('./main.js'); };
+  if (!gl2) { warn.textContent = 'المتصفح ده مش بيدعم WebGL2 — افتح اللينك من Chrome أو Edge على كمبيوتر.'; warn.style.display = 'block'; document.getElementById('status').textContent = ''; document.getElementById('go').textContent = ''; }
+  else if (touchOnly) {
+    warn.innerHTML = 'الغابة معمولة للكمبيوتر (كيبورد وماوس) وتقيلة على الموبايل.<br><button id="anyway">افتحها برضو</button>';
+    warn.style.display = 'block'; document.getElementById('go').textContent = '';
+    document.getElementById('anyway').onclick = (e) => { e.stopPropagation(); start(); };
+  } else start();
+</script>
+</body>
+</html>

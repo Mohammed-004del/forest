@@ -1,0 +1,12 @@
+# publish only the site itself
+/*
+!/.gitignore
+!/index.html
+!/main.js
+!/animals.js
+!/audio.js
+!/grass.js
+!/scatter.js
+!/impostor.js
+!/assets/
+!/.nojekyll
